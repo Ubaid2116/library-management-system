@@ -855,9 +855,9 @@ with tabs[0]:  # Browse Books
     
     col1, col2 = st.columns(2)
     with col1:
-        genre_filter = st.selectbox("📚 Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist()))
+        genre_filter = st.selectbox("Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist()), label_visibility="collapsed", key="genre_filter")
     with col2:
-        sort_by = st.selectbox("🔄 Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)"])
+        sort_by = st.selectbox("Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)"], label_visibility="collapsed", key="sort_by")
     
     st.markdown("</div>", unsafe_allow_html=True)
     
@@ -963,7 +963,7 @@ with tabs[2]:  # Edit Books
         """, unsafe_allow_html=True)
         
         book_options = books['title'].tolist()
-        selected_book_title = st.selectbox("Select a Book to Edit", book_options, label_visibility="collapsed")
+        selected_book_title = st.selectbox("Select Book", book_options, label_visibility="collapsed", key="edit_book_select")
         
         st.markdown("</div>", unsafe_allow_html=True)
         
@@ -1024,8 +1024,7 @@ with tabs[2]:  # Edit Books
             if delete_button:
                 delete_book(book_id)
                 st.success(f"Book '{selected_book['title']}' has been deleted successfully!")
-                st.session_state.clear()
-                st.experimental_rerun()
+                st.rerun()  # Using st.rerun() instead of st.experimental_rerun()
     else:
         # Enhanced empty state
         st.markdown("""
@@ -1051,8 +1050,8 @@ with tabs[3]:  # Search
         </div>
     """, unsafe_allow_html=True)
     
-    search_query = st.text_input("", placeholder="Search by title, author, genre, or ISBN...", 
-                                help="Enter your search term and press Enter")
+    search_query = st.text_input("Search", placeholder="Search by title, author, genre, or ISBN...", 
+                                help="Enter your search term and press Enter", label_visibility="collapsed", key="search_input")
     
     st.markdown("</div>", unsafe_allow_html=True)
     
