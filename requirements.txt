@@ -1,0 +1,8 @@
+streamlit
+pandas
+sqlite3
+plotly
+extra-streamlit-components
+streamlit-option-menu
+streamlit-lottie
+requests
