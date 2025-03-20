@@ -753,12 +753,34 @@ with tabs[0]:  # Browse Books
     books = get_all_books()
     
     # Filter options with better styling
-    st.markdown("<div style='margin-bottom: 30px;'>", unsafe_allow_html=True)
+    st.markdown("""
+    <style>
+        .filter-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--card-color);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px var(--shadow);
+        }
+        .filter-container label {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+        .filter-container .stSelectbox, .filter-container .stNumberInput {
+            margin-bottom: 20px;
+        }
+    </style>
+    <div class='filter-container'>
+    """, unsafe_allow_html=True)
+    
     col1, col2 = st.columns(2)
     with col1:
-        genre_filter = st.selectbox("📚 Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist()))
+        genre_filter = st.selectbox("📚 Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist())
     with col2:
         sort_by = st.selectbox("🔄 Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)"])
+    
     st.markdown("</div>", unsafe_allow_html=True)
     
     # Apply filters
@@ -802,7 +824,7 @@ with tabs[0]:  # Browse Books
                     st.write(book['description'])
     else:
         st.info("No books found matching your criteria.")
-
+        
 with tabs[1]:  # Add Book
     st.markdown("<h2 class='sub-header fade-in'>➕ Add New Book</h2>", unsafe_allow_html=True)
     
