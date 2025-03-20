@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS with enhanced UI, bolder text, and more attractive styling
+# Custom CSS with fixed styling issues
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
@@ -126,6 +126,8 @@ st.markdown("""
         color: var(--primary-color);
         margin-bottom: 0.8rem;
         line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     /* Book author styling - BOLDER */
@@ -135,6 +137,8 @@ st.markdown("""
         color: var(--secondary-color);
         margin-bottom: 1.2rem;
         font-style: italic;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     /* Book details styling - BOLDER */
@@ -144,13 +148,16 @@ st.markdown("""
         color: var(--text-secondary);
         margin-bottom: 0.8rem;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .book-details i {
         margin-right: 0.8rem;
         color: var(--accent-color);
         font-size: 1.2rem;
+        flex-shrink: 0;
     }
     
     /* Badge styling - ENHANCED */
@@ -167,6 +174,9 @@ st.markdown("""
         box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
     }
     
     .badge-fiction {
@@ -225,6 +235,10 @@ st.markdown("""
         box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
         text-transform: uppercase;
         letter-spacing: 1px;
+        width: 100%;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .stButton button:hover {
@@ -255,6 +269,30 @@ st.markdown("""
         color: var(--text-primary);
         transition: all 0.3s ease;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Fix for select boxes */
+    .stSelectbox div[data-baseweb="select"] {
+        width: 100%;
+    }
+    
+    .stSelectbox div[data-baseweb="select"] div[data-testid="stMarkdownContainer"] p {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    /* Fix for labels */
+    .stTextInput label, .stTextArea label, .stSelectbox label, .stNumberInput label {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 1rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
     }
     
     .stTextInput input:focus, .stTextArea textarea:focus, .stSelectbox div[data-baseweb="select"] div:focus, .stNumberInput div[data-baseweb="input"] input:focus {
@@ -269,6 +307,9 @@ st.markdown("""
         background-color: var(--card-color);
         border-radius: 12px;
         padding: 0.8rem 1.2rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
     }
     
     /* Sidebar styling - ENHANCED */
@@ -435,6 +476,8 @@ st.markdown("""
         text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         position: relative;
         overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .book-cover::after {
@@ -456,6 +499,9 @@ st.markdown("""
         border-radius: 10px 10px 0 0;
         padding: 10px 20px;
         font-weight: 700;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .stTabs [aria-selected="true"] {
@@ -469,6 +515,40 @@ st.markdown("""
         border-radius: 20px;
         padding: 20px;
         box-shadow: 0 10px 25px var(--shadow);
+    }
+    
+    /* Fix for filter and sort dropdowns */
+    .stSelectbox[data-testid="stSelectbox"] {
+        margin-bottom: 20px;
+    }
+    
+    /* Fix for text overflow in all elements */
+    [data-testid="stVerticalBlock"] > div {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+    }
+    
+    /* Fix for description text */
+    .streamlit-expanderContent p {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+        color: var(--text-secondary) !important;
+    }
+    
+    /* Fix for success/error messages */
+    .stAlert {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+    }
+    
+    .stAlert p {
+        font-weight: 600 !important;
+        font-size: 1rem !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -673,11 +753,13 @@ with tabs[0]:  # Browse Books
     books = get_all_books()
     
     # Filter options with better styling
+    st.markdown("<div style='margin-bottom: 30px;'>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
     with col1:
         genre_filter = st.selectbox("📚 Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist()))
     with col2:
         sort_by = st.selectbox("🔄 Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)"])
+    st.markdown("</div>", unsafe_allow_html=True)
     
     # Apply filters
     if genre_filter != "All":
