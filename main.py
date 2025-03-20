@@ -11,77 +11,106 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better styling, including a styled sidebar
+# Custom CSS with a refreshed, attractive color theme
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     
-    body {
+    html, body {
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
         font-family: 'Poppins', sans-serif;
     }
+    
     .main-header {
-        font-size: 48px;
+        font-size: 50px;
         font-weight: 700;
-        color: #1E3A8A;
+        color: #2F80ED;
         text-align: center;
         margin-bottom: 30px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #1E3A8A;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #2F80ED;
     }
+    
     .sub-header {
-        font-size: 32px;
+        font-size: 36px;
         font-weight: 600;
-        color: #2563EB;
+        color: #EB5757;
         margin-top: 20px;
         margin-bottom: 20px;
     }
+    
     .card {
-        background-color: #F3F4F6;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 16px rgba(47, 128, 237, 0.1);
+        transition: transform 0.2s ease-in-out;
     }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
     .book-title {
-        font-size: 22px;
+        font-size: 24px;
         font-weight: 700;
-        color: #1F2937;
-        margin-bottom: 5px;
+        color: #333333;
+        margin-bottom: 8px;
     }
+    
     .book-author {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 500;
-        color: #4B5563;
-        margin-bottom: 10px;
+        color: #555555;
+        margin-bottom: 12px;
     }
+    
     .book-details {
-        font-size: 16px;
-        color: #6B7280;
-        margin-bottom: 5px;
+        font-size: 18px;
+        color: #666666;
+        margin-bottom: 6px;
     }
+    
     .sidebar-content {
-        background-color: #e2e8f0;
+        background-color: #2F80ED;
         padding: 30px;
-        border-radius: 10px;
+        border-radius: 15px;
+        color: #ffffff;
+        font-size: 20px;
+    }
+    
+    .sidebar-content h2, .sidebar-content p {
+        color: #ffffff;
+    }
+    
+    .stButton button {
+        background-color: #EB5757;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 12px 24px;
+        border: none;
         font-size: 18px;
     }
-    .stButton button {
-        background-color: #2563EB;
-        color: white;
-        font-weight: bold;
-        border-radius: 5px;
-        padding: 10px 20px;
-        border: none;
-    }
+    
     .stButton button:hover {
-        background-color: #1E40AF;
+        background-color: #cf4a4a;
     }
+    
     .delete-btn {
-        background-color: #DC2626 !important;
+        background-color: #D7263D !important;
     }
+    
     .delete-btn:hover {
-        background-color: #B91C1C !important;
+        background-color: #a31f2e !important;
     }
+    
+    .css-1d391kg {  /* Adjusts sidebar title font size */
+        font-size: 22px;
+        font-weight: 600;
+    }
+    
 </style>
 """, unsafe_allow_html=True)
 
@@ -217,7 +246,7 @@ def search_books(query):
 # Initialize the database
 init_db()
 
-# Sidebar for navigation with custom background and styling
+# Sidebar for navigation with custom styling
 st.sidebar.markdown("<div class='sidebar-content'>", unsafe_allow_html=True)
 st.sidebar.markdown("## 📚 Navigation")
 page = st.sidebar.radio("", ["View Books", "Add Book", "Edit/Delete Books", "Search Books"])
