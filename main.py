@@ -742,8 +742,6 @@ with tabs[1]:  # Add Book
         if submitted:
             if title and author:
                 add_book(title, author, genre, year, isbn, description)
-                st.success(f"Book '{title}' 
-                add_book(title, author, genre, year, isbn, description)
                 st.success(f"Book '{title}' has been added successfully!")
                 st.balloons()
                 
