@@ -62,7 +62,6 @@ st.markdown("""
         font-size: 4rem;
         font-weight: 900;
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
         text-align: center;
         margin: 2rem 0;
         padding-bottom: 0.5rem;
