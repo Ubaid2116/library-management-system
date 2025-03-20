@@ -298,6 +298,9 @@ st.markdown("""
         font-weight: 600 !important;
         color: var(--primary-color) !important;
         padding: 0.7rem 1rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
     .stSelectbox label {
@@ -830,7 +833,7 @@ def get_random_gradient():
     return random.choice(gradients)
 
 # Main content
-st.markdown("<h1 class='main-header'>📚 BookVerse</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-header'>📚 BOOKVERSE</h1>", unsafe_allow_html=True)
 
 # Create tabs with better styling
 tabs = st.tabs(["📚 Browse", "➕ Add Book", "✏️ Edit Books", "🔍 Search", "📊 Statistics"])
