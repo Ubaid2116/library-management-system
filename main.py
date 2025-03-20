@@ -2,12 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 from datetime import datetime
-import plotly.express as px
-import extra_streamlit_components as stx
-from streamlit_option_menu import option_menu
-from streamlit_lottie import st_lottie
-import requests
-
+import random
 
 # Set page configuration
 st.set_page_config(
@@ -17,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS with modern design, animations and beautiful typography
+# Custom CSS with modern design and beautiful typography
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
@@ -465,11 +460,22 @@ st.markdown("""
         color: white !important;
     }
     
-    /* Lottie animation container */
-    .lottie-container {
+    /* Book cover styling */
+    .book-cover {
+        width: 100%;
+        height: 200px;
+        background-color: var(--primary-color);
+        border-radius: 8px;
         display: flex;
+        align-items: center;
         justify-content: center;
-        margin: 1rem 0;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -487,10 +493,6 @@ def init_db():
         year INTEGER,
         isbn TEXT,
         description TEXT,
-        cover_url TEXT,
-        rating REAL,
-        pages INTEGER,
-        language TEXT,
         added_date TEXT
     )
     ''')
@@ -502,62 +504,51 @@ def init_db():
     
     if count == 0:
         # Add sample books with more details
-        languages = ["English", "Spanish", "French", "German", "Japanese"]
         sample_books = [
             ("To Kill a Mockingbird", "Harper Lee", "Fiction", 1960, "978-0061120084", 
              "A classic of modern American literature about racial inequality in the American South.", 
-             f"/placeholder.svg?height=300&width=200&text=To+Kill+a+Mockingbird", 
-             4.8, 281, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("1984", "George Orwell", "Dystopian", 1949, "978-0451524935", 
              "A dystopian social science fiction novel about totalitarianism, mass surveillance, and repressive regimentation.", 
-             f"/placeholder.svg?height=300&width=200&text=1984", 
-             4.7, 328, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("The Great Gatsby", "F. Scott Fitzgerald", "Classic", 1925, "978-0743273565", 
              "A novel about the American Dream, decadence, resistance to change, and social upheaval set in the Roaring Twenties.", 
-             f"/placeholder.svg?height=300&width=200&text=The+Great+Gatsby", 
-             4.5, 180, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("Pride and Prejudice", "Jane Austen", "Romance", 1813, "978-0141439518", 
              "A romantic novel of manners that depicts the emotional development of Elizabeth Bennet, who learns about the repercussions of hasty judgments.", 
-             f"/placeholder.svg?height=300&width=200&text=Pride+and+Prejudice", 
-             4.6, 432, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("The Hobbit", "J.R.R. Tolkien", "Fantasy", 1937, "978-0547928227", 
              "A fantasy novel about the adventures of hobbit Bilbo Baggins, who is hired by the wizard Gandalf as a burglar for a group of dwarves.", 
-             f"/placeholder.svg?height=300&width=200&text=The+Hobbit", 
-             4.9, 366, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("One Hundred Years of Solitude", "Gabriel García Márquez", "Magical Realism", 1967, "978-0060883287", 
              "A landmark of magical realism that tells the multi-generational story of the Buendía family in the fictional town of Macondo.", 
-             f"/placeholder.svg?height=300&width=200&text=One+Hundred+Years+of+Solitude", 
-             4.7, 417, "Spanish", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("The Alchemist", "Paulo Coelho", "Fiction", 1988, "978-0062315007", 
              "A philosophical novel about a young Andalusian shepherd who dreams of finding worldly treasures and embarks on a journey to find them.", 
-             f"/placeholder.svg?height=300&width=200&text=The+Alchemist", 
-             4.6, 197, "Portuguese", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("The Catcher in the Rye", "J.D. Salinger", "Coming-of-age", 1951, "978-0316769488", 
              "A novel about teenage angst, alienation, and the loss of innocence, narrated by the protagonist Holden Caulfield.", 
-             f"/placeholder.svg?height=300&width=200&text=The+Catcher+in+the+Rye", 
-             4.3, 277, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("The Lord of the Rings", "J.R.R. Tolkien", "Fantasy", 1954, "978-0618640157", 
              "An epic high-fantasy novel that follows the quest to destroy the One Ring, which was created by the Dark Lord Sauron.", 
-             f"/placeholder.svg?height=300&width=200&text=The+Lord+of+the+Rings", 
-             4.9, 1178, "English", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             
             ("Crime and Punishment", "Fyodor Dostoevsky", "Psychological Fiction", 1866, "978-0143107637", 
              "A novel that focuses on the mental anguish and moral dilemmas of Rodion Raskolnikov, an impoverished ex-student in Saint Petersburg.", 
-             f"/placeholder.svg?height=300&width=200&text=Crime+and+Punishment", 
-             4.5, 671, "Russian", datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+             datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
         ]
         
         c.executemany('''
-        INSERT INTO books (title, author, genre, year, isbn, description, cover_url, rating, pages, language, added_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO books (title, author, genre, year, isbn, description, added_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', sample_books)
         conn.commit()
     
@@ -570,24 +561,24 @@ def get_all_books():
     conn.close()
     return books
 
-def add_book(title, author, genre, year, isbn, description, cover_url, rating=0, pages=0, language="English"):
+def add_book(title, author, genre, year, isbn, description):
     conn = sqlite3.connect('library.db')
     c = conn.cursor()
     c.execute('''
-    INSERT INTO books (title, author, genre, year, isbn, description, cover_url, rating, pages, language, added_date)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (title, author, genre, year, isbn, description, cover_url, rating, pages, language, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    INSERT INTO books (title, author, genre, year, isbn, description, added_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (title, author, genre, year, isbn, description, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     conn.commit()
     conn.close()
 
-def update_book(id, title, author, genre, year, isbn, description, cover_url, rating, pages, language):
+def update_book(id, title, author, genre, year, isbn, description):
     conn = sqlite3.connect('library.db')
     c = conn.cursor()
     c.execute('''
     UPDATE books
-    SET title = ?, author = ?, genre = ?, year = ?, isbn = ?, description = ?, cover_url = ?, rating = ?, pages = ?, language = ?
+    SET title = ?, author = ?, genre = ?, year = ?, isbn = ?, description = ?
     WHERE id = ?
-    ''', (title, author, genre, year, isbn, description, cover_url, rating, pages, language, id))
+    ''', (title, author, genre, year, isbn, description, id))
     conn.commit()
     conn.close()
 
@@ -614,11 +605,7 @@ def get_book(id):
             "year": book[4],
             "isbn": book[5],
             "description": book[6],
-            "cover_url": book[7],
-            "rating": book[8],
-            "pages": book[9],
-            "language": book[10],
-            "added_date": book[11]
+            "added_date": book[7]
         }
     return None
 
@@ -627,13 +614,13 @@ def search_books(query):
     c = conn.cursor()
     c.execute("""
     SELECT * FROM books 
-    WHERE title LIKE ? OR author LIKE ? OR genre LIKE ? OR isbn LIKE ? OR language LIKE ?
+    WHERE title LIKE ? OR author LIKE ? OR genre LIKE ? OR isbn LIKE ?
     ORDER BY title
-    """, (f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%"))
+    """, (f"%{query}%", f"%{query}%", f"%{query}%", f"%{query}%"))
     books = c.fetchall()
     conn.close()
     
-    return pd.DataFrame(books, columns=["id", "title", "author", "genre", "year", "isbn", "description", "cover_url", "rating", "pages", "language", "added_date"])
+    return pd.DataFrame(books, columns=["id", "title", "author", "genre", "year", "isbn", "description", "added_date"])
 
 def get_stats():
     conn = sqlite3.connect('library.db')
@@ -647,17 +634,9 @@ def get_stats():
     c.execute("SELECT COUNT(DISTINCT author) FROM books")
     total_authors = c.fetchone()[0]
     
-    # Average rating
-    c.execute("SELECT AVG(rating) FROM books")
-    avg_rating = c.fetchone()[0] or 0
-    
     # Genre distribution
     c.execute("SELECT genre, COUNT(*) FROM books GROUP BY genre ORDER BY COUNT(*) DESC")
     genre_data = c.fetchall()
-    
-    # Language distribution
-    c.execute("SELECT language, COUNT(*) FROM books GROUP BY language ORDER BY COUNT(*) DESC")
-    language_data = c.fetchall()
     
     # Year distribution
     c.execute("SELECT year, COUNT(*) FROM books GROUP BY year ORDER BY year")
@@ -668,84 +647,38 @@ def get_stats():
     return {
         "total_books": total_books,
         "total_authors": total_authors,
-        "avg_rating": round(avg_rating, 1),
         "genre_data": genre_data,
-        "language_data": language_data,
         "year_data": year_data
     }
 
 # Initialize the database
 init_db()
 
-# Load Lottie animations
-def load_lottieurl(url):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.json()
-
-# Lottie animations
-lottie_book = load_lottieurl('https://assets5.lottiefiles.com/packages/lf20_1cazwtnc.json')
-lottie_add = load_lottieurl('https://assets2.lottiefiles.com/private_files/lf30_cp6h8mjh.json')
-lottie_search = load_lottieurl('https://assets3.lottiefiles.com/packages/lf20_kqfglbhb.json')
-lottie_stats = load_lottieurl('https://assets10.lottiefiles.com/packages/lf20_xlmz9xwm.json')
-
-# Create tabs with option_menu
-selected = option_menu(
-    menu_title=None,
-    options=["📚 Browse", "➕ Add Book", "✏️ Edit Books", "🔍 Search", "📊 Statistics"],
-    icons=["book", "plus-circle", "pencil-square", "search", "bar-chart"],
-    menu_icon="cast",
-    default_index=0,
-    orientation="horizontal",
-    styles={
-        "container": {"padding": "0!important", "background-color": "#f8f9fa", "border-radius": "10px", "margin-bottom": "20px"},
-        "icon": {"color": "#6C63FF", "font-size": "16px"},
-        "nav-link": {"font-size": "16px", "text-align": "center", "margin": "0px", "padding": "10px 20px", "--hover-color": "#f0f0f0"},
-        "nav-link-selected": {"background-color": "#6C63FF", "color": "white"},
-    }
-)
+# Generate a random color for book covers
+def get_random_color():
+    colors = [
+        "#6C63FF", "#FF6584", "#43B97F", "#FFA94D", "#845EF7", 
+        "#F03E3E", "#FF8ED4", "#20C997", "#748FFC", "#9775FA"
+    ]
+    return random.choice(colors)
 
 # Main content
 st.markdown("<h1 class='main-header'>📚 BookVerse</h1>", unsafe_allow_html=True)
 
-# Create a cookie manager for theme toggle
-cookie_manager = stx.CookieManager()
-current_theme = cookie_manager.get(cookie="theme") or "light"
+# Create tabs
+tabs = st.tabs(["📚 Browse", "➕ Add Book", "✏️ Edit Books", "🔍 Search", "📊 Statistics"])
 
-# Theme toggle button
-if st.button("🌓 Toggle Theme"):
-    current_theme = "dark" if current_theme == "light" else "light"
-    cookie_manager.set("theme", current_theme, expires_at=datetime.now().timestamp() + 30*24*60*60)
-    st.experimental_rerun()
-
-# Apply theme class based on cookie
-if current_theme == "dark":
-    st.markdown("""
-    <script>
-        document.body.classList.add('dark');
-    </script>
-    """, unsafe_allow_html=True)
-
-if selected == "📚 Browse":
+with tabs[0]:  # Browse Books
     st.markdown("<h2 class='sub-header fade-in'>📖 Book Collection</h2>", unsafe_allow_html=True)
-    
-    # Lottie animation
-    with st.container():
-        st.markdown("<div class='lottie-container'>", unsafe_allow_html=True)
-        st_lottie(lottie_book, height=200, key="book_animation")
-        st.markdown("</div>", unsafe_allow_html=True)
     
     books = get_all_books()
     
     # Filter options
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     with col1:
         genre_filter = st.selectbox("Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist()))
     with col2:
-        sort_by = st.selectbox("Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)", "Rating (Highest)"])
-    with col3:
-        view_type = st.radio("View", ["Cards", "Table"], horizontal=True)
+        sort_by = st.selectbox("Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)"])
     
     # Apply filters
     if genre_filter != "All":
@@ -764,23 +697,21 @@ if selected == "📚 Browse":
         filtered_books = filtered_books.sort_values("year", ascending=False)
     elif sort_by == "Year (Oldest)":
         filtered_books = filtered_books.sort_values("year")
-    elif sort_by == "Rating (Highest)":
-        filtered_books = filtered_books.sort_values("rating", ascending=False)
     
-    # Display books based on view type
-    if view_type == "Cards":
-        # Display books in a grid with cards
+    # Display books in a grid with cards
+    if not filtered_books.empty:
         cols = st.columns(3)
         for i, (_, book) in enumerate(filtered_books.iterrows()):
             with cols[i % 3]:
+                color = get_random_color()
                 st.markdown(f"""
                 <div class='book-card fade-in'>
+                    <div class='book-cover' style='background-color: {color};'>
+                        {book['title']}
+                    </div>
                     <div class='book-title'>{book['title']}</div>
                     <div class='book-author'>by {book['author']}</div>
                     <div class='book-details'><i>📅</i> Published: {book['year']}</div>
-                    <div class='book-details'><i>⭐</i> Rating: {book['rating']}/5.0</div>
-                    <div class='book-details'><i>📘</i> Pages: {book['pages']}</div>
-                    <div class='book-details'><i>🌐</i> Language: {book['language']}</div>
                     <div class='badge badge-{book["genre"].lower().replace(" ", "")}'>{book['genre']}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -788,87 +719,49 @@ if selected == "📚 Browse":
                 with st.expander("Description"):
                     st.write(book['description'])
     else:
-        # Display as table
-        display_cols = ["title", "author", "genre", "year", "rating", "language"]
-        st.dataframe(filtered_books[display_cols], use_container_width=True)
+        st.info("No books found matching your criteria.")
 
-elif selected == "➕ Add Book":
+with tabs[1]:  # Add Book
     st.markdown("<h2 class='sub-header fade-in'>➕ Add New Book</h2>", unsafe_allow_html=True)
     
-    # Lottie animation
-    with st.container():
-        st.markdown("<div class='lottie-container'>", unsafe_allow_html=True)
-        st_lottie(lottie_add, height=200, key="add_animation")
-        st.markdown("</div>", unsafe_allow_html=True)
-    
-    # Create tabs for basic and advanced info
-    tab1, tab2 = st.tabs(["📝 Basic Info", "🔍 Advanced Details"])
-    
-    with tab1:
-        with st.form("add_book_form_basic"):
-            title = st.text_input("Title", max_chars=100)
-            author = st.text_input("Author", max_chars=100)
-            genre = st.selectbox("Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
-                                        "Mystery", "Thriller", "Romance", "Biography", 
-                                        "History", "Self-Help", "Magical Realism", "Coming-of-age",
-                                        "Psychological Fiction", "Other"])
-            year = st.number_input("Publication Year", min_value=1000, max_value=datetime.now().year, 
-                                value=2020, step=1)
-            description = st.text_area("Description", height=150)
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                rating = st.slider("Rating", 0.0, 5.0, 4.0, 0.1)
-            with col2:
-                language = st.selectbox("Language", ["English", "Spanish", "French", "German", "Italian", 
-                                                    "Portuguese", "Russian", "Japanese", "Chinese", "Other"])
-            
-            # For demo purposes, we'll use a placeholder image
-            cover_url = f"/placeholder.svg?height=300&width=200&text={title.replace(' ', '+')}"
-            
-            submitted_basic = st.form_submit_button("Add Book")
-    
-    with tab2:
-        with st.form("add_book_form_advanced"):
-            isbn = st.text_input("ISBN", max_chars=20)
-            pages = st.number_input("Number of Pages", min_value=1, max_value=10000, value=300)
-            
-            # Additional fields could be added here
-            publisher = st.text_input("Publisher (Optional)")
-            edition = st.text_input("Edition (Optional)")
-            
-            submitted_advanced = st.form_submit_button("Add Book with Advanced Details")
-    
-    # Process form submission
-    if submitted_basic:
-        if title and author:
-            add_book(title, author, genre, year, "", description, cover_url, rating, 0, language)
-            st.success(f"Book '{title}' has been added successfully!")
-            st.balloons()
-            
-            # Show success card
-            st.markdown(f"""
-            <div class='book-card fade-in'>
-                <div class='book-title'>{title}</div>
-                <div class='book-author'>by {author}</div>
-                <div class='book-details'><i>📅</i> Published: {year}</div>
-                <div class='book-details'><i>⭐</i> Rating: {rating}/5.0</div>
-                <div class='badge badge-{genre.lower().replace(" ", "")}'>{genre}</div>
-                <p>Book added to your library!</p>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.error("Title and Author are required fields.")
-    
-    if submitted_advanced:
-        if title and author:
-            add_book(title, author, genre, year, isbn, description, cover_url, rating, pages, language)
-            st.success(f"Book '{title}' has been added successfully with advanced details!")
-            st.balloons()
-        else:
-            st.error("Title and Author are required fields.")
+    with st.form("add_book_form"):
+        title = st.text_input("Title", max_chars=100)
+        author = st.text_input("Author", max_chars=100)
+        genre = st.selectbox("Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
+                                      "Mystery", "Thriller", "Romance", "Biography", 
+                                      "History", "Self-Help", "Magical Realism", "Coming-of-age",
+                                      "Psychological Fiction", "Other"])
+        year = st.number_input("Publication Year", min_value=1000, max_value=datetime.now().year, 
+                              value=2020, step=1)
+        isbn = st.text_input("ISBN", max_chars=20)
+        description = st.text_area("Description", height=150)
+        
+        submitted = st.form_submit_button("Add Book")
+        
+        if submitted:
+            if title and author:
+                add_book(title, author, genre, year, isbn, description)
+                st.success(f"Book '{title}' has been added successfully!")
+                st.balloons()
+                
+                # Show success card
+                color = get_random_color()
+                st.markdown(f"""
+                <div class='book-card fade-in'>
+                    <div class='book-cover' style='background-color: {color};'>
+                        {title}
+                    </div>
+                    <div class='book-title'>{title}</div>
+                    <div class='book-author'>by {author}</div>
+                    <div class='book-details'><i>📅</i> Published: {year}</div>
+                    <div class='badge badge-{genre.lower().replace(" ", "")}'>{genre}</div>
+                    <p>Book added to your library!</p>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.error("Title and Author are required fields.")
 
-elif selected == "✏️ Edit Books":
+with tabs[2]:  # Edit Books
     st.markdown("<h2 class='sub-header fade-in'>✏️ Edit or Delete Books</h2>", unsafe_allow_html=True)
     
     books = get_all_books()
@@ -881,92 +774,57 @@ elif selected == "✏️ Edit Books":
         book_id = selected_book['id']
         
         # Display book details in a card
+        color = get_random_color()
         st.markdown(f"""
         <div class='book-card fade-in'>
+            <div class='book-cover' style='background-color: {color};'>
+                {selected_book['title']}
+            </div>
             <div class='book-title'>{selected_book['title']}</div>
             <div class='book-author'>by {selected_book['author']}</div>
             <div class='book-details'><i>📅</i> Published: {selected_book['year']}</div>
-            <div class='book-details'><i>⭐</i> Rating: {selected_book['rating']}/5.0</div>
-            <div class='book-details'><i>📘</i> Pages: {selected_book['pages']}</div>
-            <div class='book-details'><i>🌐</i> Language: {selected_book['language']}</div>
             <div class='badge badge-{selected_book["genre"].lower().replace(" ", "")}'>{selected_book['genre']}</div>
         </div>
         """, unsafe_allow_html=True)
         
-        # Create tabs for editing
-        tab1, tab2 = st.tabs(["📝 Basic Info", "🔍 Advanced Details"])
-        
-        with tab1:
-            with st.form("edit_book_form_basic"):
-                edit_title = st.text_input("Title", value=selected_book['title'], max_chars=100)
-                edit_author = st.text_input("Author", value=selected_book['author'], max_chars=100)
-                edit_genre = st.selectbox("Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
-                                                "Mystery", "Thriller", "Romance", "Biography", 
-                                                "History", "Self-Help", "Magical Realism", "Coming-of-age",
-                                                "Psychological Fiction", "Other"], 
-                                        index=["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
-                                                "Mystery", "Thriller", "Romance", "Biography", 
-                                                "History", "Self-Help", "Magical Realism", "Coming-of-age",
-                                                "Psychological Fiction", "Other"].index(selected_book['genre']) 
-                                                if selected_book['genre'] in ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
-                                                                            "Mystery", "Thriller", "Romance", "Biography", 
-                                                                            "History", "Self-Help", "Magical Realism", "Coming-of-age",
-                                                                            "Psychological Fiction", "Other"] else 0)
-                edit_year = st.number_input("Publication Year", min_value=1000, max_value=datetime.now().year, 
-                                        value=int(selected_book['year']), step=1)
-                edit_description = st.text_area("Description", value=selected_book['description'] if selected_book['description'] else "", height=150)
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    edit_rating = st.slider("Rating", 0.0, 5.0, float(selected_book['rating']), 0.1)
-                with col2:
-                    edit_language = st.selectbox("Language", ["English", "Spanish", "French", "German", "Italian", 
-                                                            "Portuguese", "Russian", "Japanese", "Chinese", "Other"],
-                                                index=["English", "Spanish", "French", "German", "Italian", 
-                                                    "Portuguese", "Russian", "Japanese", "Chinese", "Other"].index(selected_book['language'])
-                                                    if selected_book['language'] in ["English", "Spanish", "French", "German", "Italian", 
-                                                                                    "Portuguese", "Russian", "Japanese", "Chinese", "Other"] else 0)
-                
+        with st.form("edit_book_form"):
+            edit_title = st.text_input("Title", value=selected_book['title'], max_chars=100)
+            edit_author = st.text_input("Author", value=selected_book['author'], max_chars=100)
+            edit_genre = st.selectbox("Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
+                                              "Mystery", "Thriller", "Romance", "Biography", 
+                                              "History", "Self-Help", "Magical Realism", "Coming-of-age",
+                                              "Psychological Fiction", "Other"], 
+                                     index=["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
+                                            "Mystery", "Thriller", "Romance", "Biography", 
+                                            "History", "Self-Help", "Magical Realism", "Coming-of-age",
+                                            "Psychological Fiction", "Other"].index(selected_book['genre']) 
+                                            if selected_book['genre'] in ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
+                                                                        "Mystery", "Thriller", "Romance", "Biography", 
+                                                                        "History", "Self-Help", "Magical Realism", "Coming-of-age",
+                                                                        "Psychological Fiction", "Other"] else 0)
+            edit_year = st.number_input("Publication Year", min_value=1000, max_value=datetime.now().year, 
+                                       value=int(selected_book['year']), step=1)
+            edit_isbn = st.text_input("ISBN", value=selected_book['isbn'] if selected_book['isbn'] else "", max_chars=20)
+            edit_description = st.text_area("Description", value=selected_book['description'] if selected_book['description'] else "", height=150)
+            
+            col1_btn, col2_btn = st.columns(2)
+            with col1_btn:
                 update_button = st.form_submit_button("Update Book")
-        
-        with tab2:
-            with st.form("edit_book_form_advanced"):
-                edit_isbn = st.text_input("ISBN", value=selected_book['isbn'] if selected_book['isbn'] else "", max_chars=20)
-                edit_pages = st.number_input("Number of Pages", min_value=1, max_value=10000, value=int(selected_book['pages']) if selected_book['pages'] else 300)
-                
-                # Keep the same cover or generate a new one if title changes
-                if edit_title != selected_book['title']:
-                    edit_cover_url = f"/placeholder.svg?height=300&width=200&text={edit_title.replace(' ', '+')}"
+            with col2_btn:
+                delete_button = st.form_submit_button("Delete Book", type="primary", help="This action cannot be undone")
+            
+            if update_button:
+                if edit_title and edit_author:
+                    update_book(book_id, edit_title, edit_author, edit_genre, edit_year, 
+                               edit_isbn, edit_description)
+                    st.success(f"Book '{edit_title}' has been updated successfully!")
                 else:
-                    edit_cover_url = selected_book['cover_url']
-                
-                update_advanced_button = st.form_submit_button("Update Advanced Details")
-        
-        # Delete button outside of forms
-        if st.button("Delete Book", type="primary", help="This action cannot be undone"):
-            delete_book(book_id)
-            st.success(f"Book '{selected_book['title']}' has been deleted successfully!")
-            st.experimental_rerun()
-        
-        # Process form submissions
-        if update_button:
-            if edit_title and edit_author:
-                # Keep advanced details the same
-                update_book(book_id, edit_title, edit_author, edit_genre, edit_year, 
-                        selected_book['isbn'], edit_description, selected_book['cover_url'], 
-                        edit_rating, selected_book['pages'], edit_language)
-                st.success(f"Book '{edit_title}' has been updated successfully!")
-            else:
-                st.error("Title and Author are required fields.")
-        
-        if update_advanced_button:
-            if edit_title and edit_author:
-                update_book(book_id, edit_title, edit_author, edit_genre, edit_year, 
-                        edit_isbn, edit_description, edit_cover_url, 
-                        edit_rating, edit_pages, edit_language)
-                st.success(f"Book '{edit_title}' has been updated with advanced details!")
-            else:
-                st.error("Title and Author are required fields.")
+                    st.error("Title and Author are required fields.")
+            
+            if delete_button:
+                delete_book(book_id)
+                st.success(f"Book '{selected_book['title']}' has been deleted successfully!")
+                st.experimental_rerun()
     else:
         # Empty state
         st.markdown("""
@@ -977,17 +835,11 @@ elif selected == "✏️ Edit Books":
         </div>
         """, unsafe_allow_html=True)
 
-elif selected == "🔍 Search":
+with tabs[3]:  # Search
     st.markdown("<h2 class='sub-header fade-in'>🔍 Search Books</h2>", unsafe_allow_html=True)
     
-    # Lottie animation
-    with st.container():
-        st.markdown("<div class='lottie-container'>", unsafe_allow_html=True)
-        st_lottie(lottie_search, height=200, key="search_animation")
-        st.markdown("</div>", unsafe_allow_html=True)
-    
     # Create a stylish search box
-    search_query = st.text_input("", placeholder="Search by title, author, genre, ISBN or language...", 
+    search_query = st.text_input("", placeholder="Search by title, author, genre, or ISBN...", 
                                 help="Enter your search term and press Enter")
     
     if search_query:
@@ -1000,14 +852,15 @@ elif selected == "🔍 Search":
             cols = st.columns(3)
             for i, (_, book) in enumerate(results.iterrows()):
                 with cols[i % 3]:
+                    color = get_random_color()
                     st.markdown(f"""
                     <div class='book-card fade-in'>
+                        <div class='book-cover' style='background-color: {color};'>
+                            {book['title']}
+                        </div>
                         <div class='book-title'>{book['title']}</div>
                         <div class='book-author'>by {book['author']}</div>
                         <div class='book-details'><i>📅</i> Published: {book['year']}</div>
-                        <div class='book-details'><i>⭐</i> Rating: {book['rating']}/5.0</div>
-                        <div class='book-details'><i>📘</i> Pages: {book['pages']}</div>
-                        <div class='book-details'><i>🌐</i> Language: {book['language']}</div>
                         <div class='badge badge-{book["genre"].lower().replace(" ", "")}'>{book['genre']}</div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -1034,26 +887,19 @@ elif selected == "🔍 Search":
                 <li>Search by title: "Lord of the Rings"</li>
                 <li>Search by author: "Tolkien"</li>
                 <li>Search by genre: "Fantasy"</li>
-                <li>Search by language: "Spanish"</li>
                 <li>Search by ISBN: "978-0"</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
-elif selected == "📊 Statistics":
+with tabs[4]:  # Statistics
     st.markdown("<h2 class='sub-header fade-in'>📊 Library Statistics</h2>", unsafe_allow_html=True)
-    
-    # Lottie animation
-    with st.container():
-        st.markdown("<div class='lottie-container'>", unsafe_allow_html=True)
-        st_lottie(lottie_stats, height=200, key="stats_animation")
-        st.markdown("</div>", unsafe_allow_html=True)
     
     # Get statistics
     stats = get_stats()
     
     # Display stats cards
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     with col1:
         st.markdown(f"""
         <div class='stats-card'>
@@ -1070,47 +916,26 @@ elif selected == "📊 Statistics":
         </div>
         """, unsafe_allow_html=True)
     
-    with col3:
-        st.markdown(f"""
-        <div class='stats-card'>
-            <div class='stats-number'>{stats['avg_rating']}</div>
-            <div class='stats-label'>Average Rating</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # Create charts
+    # Display genre distribution
     st.subheader("Genre Distribution")
     if stats['genre_data']:
+        # Create a simple bar chart
         genre_df = pd.DataFrame(stats['genre_data'], columns=['Genre', 'Count'])
-        fig_genre = px.pie(genre_df, values='Count', names='Genre', hole=0.4,
-                          color_discrete_sequence=px.colors.qualitative.Bold)
-        fig_genre.update_layout(margin=dict(t=0, b=0, l=0, r=0))
-        st.plotly_chart(fig_genre, use_container_width=True)
+        st.bar_chart(genre_df.set_index('Genre'))
     
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Language Distribution")
-        if stats['language_data']:
-            language_df = pd.DataFrame(stats['language_data'], columns=['Language', 'Count'])
-            fig_language = px.bar(language_df, x='Language', y='Count', 
-                                color='Count', color_continuous_scale='Viridis')
-            fig_language.update_layout(margin=dict(t=30, b=0, l=0, r=0))
-            st.plotly_chart(fig_language, use_container_width=True)
-    
-    with col2:
-        st.subheader("Publication Years")
-        if stats['year_data']:
-            year_df = pd.DataFrame(stats['year_data'], columns=['Year', 'Count'])
-            fig_year = px.line(year_df, x='Year', y='Count', markers=True)
-            fig_year.update_layout(margin=dict(t=30, b=0, l=0, r=0))
-            st.plotly_chart(fig_year, use_container_width=True)
+    # Display year distribution
+    st.subheader("Publication Years")
+    if stats['year_data']:
+        # Create a simple line chart
+        year_df = pd.DataFrame(stats['year_data'], columns=['Year', 'Count'])
+        year_df['Year'] = year_df['Year'].astype(str)
+        st.line_chart(year_df.set_index('Year'))
 
 # Footer
 st.markdown("---")
 st.markdown("""
 <div class='footer'>
     <p>📚 BookVerse | Modern Library Management System</p>
-    <p>Created with ❤️ using Streamlit, SQLite, and modern UI components</p>
+    <p>Created with ❤️ using Streamlit and SQLite</p>
 </div>
 """, unsafe_allow_html=True)
