@@ -777,7 +777,7 @@ with tabs[0]:  # Browse Books
     
     col1, col2 = st.columns(2)
     with col1:
-        genre_filter = st.selectbox("📚 Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist())
+        genre_filter = st.selectbox("📚 Filter by Genre", ["All"] + sorted(books["genre"].unique().tolist()))
     with col2:
         sort_by = st.selectbox("🔄 Sort by", ["Title (A-Z)", "Title (Z-A)", "Author", "Year (Newest)", "Year (Oldest)"])
     
