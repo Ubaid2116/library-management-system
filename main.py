@@ -963,7 +963,7 @@ with tabs[2]:  # Edit Books
         """, unsafe_allow_html=True)
         
         book_options = books['title'].tolist()
-        selected_book_title = st.selectbox("Select a Book to Edit", book_options)
+        selected_book_title = st.selectbox("Select a Book to Edit", book_options, label_visibility="collapsed")
         
         st.markdown("</div>", unsafe_allow_html=True)
         
@@ -1024,6 +1024,7 @@ with tabs[2]:  # Edit Books
             if delete_button:
                 delete_book(book_id)
                 st.success(f"Book '{selected_book['title']}' has been deleted successfully!")
+                st.session_state.clear()
                 st.experimental_rerun()
     else:
         # Enhanced empty state
