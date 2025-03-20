@@ -61,7 +61,6 @@ st.markdown("""
         font-family: 'Playfair Display', serif;
         font-size: 4rem;
         font-weight: 900;
-        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         text-align: center;
