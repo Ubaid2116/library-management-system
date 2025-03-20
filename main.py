@@ -12,635 +12,494 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS with enhanced UI, bolder text, and more attractive styling
+# Custom CSS with minimalist elegant design
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap');
     
     :root {
-        --primary-color: #6366F1;
-        --secondary-color: #EC4899;
+        --primary-color: #4F46E5;
+        --primary-light: #818CF8;
+        --primary-dark: #3730A3;
+        --secondary-color: #F43F5E;
         --accent-color: #10B981;
-        --background-color: #F8FAFC;
+        --background-color: #F9FAFB;
         --card-color: #FFFFFF;
-        --text-primary: #1E293B;
-        --text-secondary: #475569;
-        --text-tertiary: #94A3B8;
-        --shadow: rgba(99, 102, 241, 0.15);
-        --gradient-primary: linear-gradient(135deg, #6366F1, #8B5CF6);
-        --gradient-secondary: linear-gradient(135deg, #EC4899, #F43F5E);
-        --filter-bg: #EEF2FF;
-        --filter-border: #C7D2FE;
-        --filter-shadow: rgba(99, 102, 241, 0.1);
+        --text-primary: #1F2937;
+        --text-secondary: #4B5563;
+        --text-tertiary: #9CA3AF;
+        --shadow: rgba(0, 0, 0, 0.05);
+        --shadow-hover: rgba(0, 0, 0, 0.1);
+        --border-color: #E5E7EB;
+        --gradient-primary: linear-gradient(135deg, #4F46E5, #818CF8);
+        --gradient-secondary: linear-gradient(135deg, #F43F5E, #FB7185);
     }
     
+    /* Dark mode variables */
     .dark {
         --primary-color: #818CF8;
-        --secondary-color: #F472B6;
+        --primary-light: #A5B4FC;
+        --primary-dark: #4F46E5;
+        --secondary-color: #FB7185;
         --accent-color: #34D399;
-        --background-color: #0F172A;
-        --card-color: #1E293B;
-        --text-primary: #F1F5F9;
-        --text-secondary: #CBD5E1;
-        --text-tertiary: #94A3B8;
-        --shadow: rgba(0, 0, 0, 0.3);
-        --filter-bg: #1E293B;
-        --filter-border: #4B5563;
-        --filter-shadow: rgba(0, 0, 0, 0.2);
+        --background-color: #111827;
+        --card-color: #1F2937;
+        --text-primary: #F9FAFB;
+        --text-secondary: #E5E7EB;
+        --text-tertiary: #9CA3AF;
+        --shadow: rgba(0, 0, 0, 0.2);
+        --shadow-hover: rgba(0, 0, 0, 0.3);
+        --border-color: #374151;
     }
     
     html, body, [data-testid="stAppViewContainer"] {
         background-color: var(--background-color);
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Poppins', sans-serif;
         color: var(--text-primary);
         transition: all 0.3s ease;
     }
     
-    /* Main header styling - BOLDER */
+    /* Main header styling */
     .main-header {
         font-family: 'Playfair Display', serif;
-        font-size: 4rem;
-        font-weight: 900;
-        -webkit-background-clip: text;
-        text-align: center;
-        margin: 2rem 0;
-        padding-bottom: 0.5rem;
-        letter-spacing: -0.5px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    /* Sub header styling - BOLDER */
-    .sub-header {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.5rem;
+        font-size: 3.5rem;
         font-weight: 800;
         color: var(--primary-color);
-        margin: 1.5rem 0;
+        text-align: center;
+        margin: 2rem 0 3rem 0;
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+    }
+    
+    .main-header span {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 400;
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-secondary);
+        letter-spacing: 2px;
+        margin-top: 0.5rem;
+        text-transform: uppercase;
+    }
+    
+    /* Section header styling */
+    .section-header {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin: 2rem 0;
         position: relative;
         display: inline-block;
+        padding-bottom: 0.5rem;
     }
     
-    .sub-header::after {
+    .section-header::after {
         content: "";
         position: absolute;
-        bottom: -10px;
+        bottom: 0;
         left: 0;
-        width: 80px;
-        height: 5px;
-        background: var(--gradient-secondary);
-        border-radius: 3px;
+        width: 60px;
+        height: 3px;
+        background: var(--secondary-color);
+        border-radius: 1.5px;
     }
     
-    /* Card styling with enhanced hover effects */
+    /* Card styling */
     .book-card {
         background-color: var(--card-color);
-        border-radius: 20px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 10px 25px var(--shadow);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border-top: 6px solid var(--primary-color);
+        border-radius: 12px;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 12px var(--shadow);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid var(--border-color);
         position: relative;
         overflow: hidden;
     }
     
     .book-card:hover {
-        transform: translateY(-12px) scale(1.02);
-        box-shadow: 0 20px 40px var(--shadow);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px var(--shadow-hover);
+        border-color: var(--primary-light);
     }
     
-    .book-card::before {
-        content: "";
+    /* Book cover styling */
+    .book-cover {
+        width: 100%;
+        height: 180px;
+        background: var(--gradient-primary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.25rem;
+        text-align: center;
+        padding: 1rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .book-cover::after {
+        content: "📖";
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 70px 70px 0;
-        border-color: transparent var(--primary-color) transparent transparent;
-        opacity: 0.2;
+        bottom: 8px;
+        right: 8px;
+        font-size: 1.5rem;
+        opacity: 0.7;
     }
     
-    /* Book title styling - BOLDER */
+    /* Book title styling */
     .book-title {
         font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: var(--primary-color);
-        margin-bottom: 0.8rem;
-        line-height: 1.3;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-    
-    /* Book author styling - BOLDER */
-    .book-author {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         font-weight: 700;
-        color: var(--secondary-color);
-        margin-bottom: 1.2rem;
-        font-style: italic;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
     
-    /* Book details styling - BOLDER */
+    /* Book author styling */
+    .book-author {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+    
+    /* Book details styling */
     .book-details {
-        font-size: 1.1rem;
-        font-weight: 600;
+        font-size: 0.95rem;
+        font-weight: 500;
         color: var(--text-secondary);
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.6rem;
         display: flex;
-        align-items: flex-start;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        align-items: center;
     }
     
     .book-details i {
-        margin-right: 0.8rem;
-        color: var(--accent-color);
-        font-size: 1.2rem;
+        margin-right: 0.6rem;
+        color: var(--primary-color);
+        font-size: 1rem;
         flex-shrink: 0;
     }
     
-    /* Badge styling - ENHANCED */
+    /* Badge styling */
     .badge {
-        display: inline-block;
-        padding: 0.4rem 1rem;
-        border-radius: 30px;
-        font-size: 0.9rem;
-        font-weight: 700;
-        margin-right: 0.7rem;
-        margin-bottom: 0.7rem;
-        background: var(--gradient-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+        margin-top: 0.75rem;
+        background-color: var(--primary-light);
         color: white;
-        box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        max-width: 100%;
     }
     
-    .badge-fiction {
-        background: linear-gradient(135deg, #6366F1, #818CF8);
-    }
+    /* Genre specific badges */
+    .badge-fiction { background-color: #4F46E5; }
+    .badge-nonfiction { background-color: #10B981; }
+    .badge-scifi { background-color: #7C3AED; }
+    .badge-fantasy { background-color: #F59E0B; }
+    .badge-mystery { background-color: #8B5CF6; }
+    .badge-thriller { background-color: #EF4444; }
+    .badge-romance { background-color: #EC4899; }
+    .badge-biography { background-color: #10B981; }
+    .badge-history { background-color: #3B82F6; }
+    .badge-selfhelp { background-color: #8B5CF6; }
+    .badge-other { background-color: #6B7280; }
     
-    .badge-nonfiction {
-        background: linear-gradient(135deg, #10B981, #34D399);
-    }
-    
-    .badge-scifi {
-        background: linear-gradient(135deg, #EC4899, #F472B6);
-    }
-    
-    .badge-fantasy {
-        background: linear-gradient(135deg, #F59E0B, #FBBF24);
-    }
-    
-    .badge-mystery {
-        background: linear-gradient(135deg, #8B5CF6, #A78BFA);
-    }
-    
-    .badge-thriller {
-        background: linear-gradient(135deg, #EF4444, #F87171);
-    }
-    
-    .badge-romance {
-        background: linear-gradient(135deg, #EC4899, #F9A8D4);
-    }
-    
-    .badge-biography {
-        background: linear-gradient(135deg, #10B981, #6EE7B7);
-    }
-    
-    .badge-history {
-        background: linear-gradient(135deg, #3B82F6, #93C5FD);
-    }
-    
-    .badge-selfhelp {
-        background: linear-gradient(135deg, #8B5CF6, #C4B5FD);
-    }
-    
-    .badge-other {
-        background: linear-gradient(135deg, #6B7280, #9CA3AF);
-    }
-    
-    /* Button styling - ENHANCED */
+    /* Button styling */
     .stButton button {
-        background: var(--gradient-primary);
+        background-color: var(--primary-color);
         color: white;
-        font-weight: 700;
-        border-radius: 12px;
-        padding: 0.8rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 0.7rem 1.2rem;
         border: none;
         transition: all 0.3s ease;
-        box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        box-shadow: 0 4px 8px rgba(79, 70, 229, 0.2);
         width: 100%;
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.5px;
     }
     
     .stButton button:hover {
-        background: var(--gradient-secondary);
-        box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4);
-        transform: translateY(-3px);
+        background-color: var(--primary-dark);
+        box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+        transform: translateY(-2px);
     }
     
     /* Delete button styling */
     .delete-btn {
-        background: linear-gradient(135deg, #EF4444, #F87171) !important;
-        box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3) !important;
+        background-color: #EF4444 !important;
+        box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2) !important;
     }
     
     .delete-btn:hover {
-        background: linear-gradient(135deg, #DC2626, #EF4444) !important;
-        box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4) !important;
+        background-color: #DC2626 !important;
+        box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3) !important;
     }
     
-    /* Form styling - ENHANCED */
+    /* Form styling */
     .stTextInput input, .stTextArea textarea, .stNumberInput div[data-baseweb="input"] input {
         background-color: var(--card-color);
-        border: 2px solid #E2E8F0;
-        border-radius: 12px;
-        padding: 0.8rem 1.2rem;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 500;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.8rem 1rem;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
         color: var(--text-primary);
         transition: all 0.3s ease;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        width: 100%;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        box-shadow: 0 2px 4px var(--shadow);
     }
     
-    /* NEW FILTER STYLING */
+    .stTextInput input:focus, .stTextArea textarea:focus, .stNumberInput div[data-baseweb="input"] input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    }
+    
+    /* Select box styling */
     .stSelectbox div[data-baseweb="select"] {
-        background-color: var(--filter-bg) !important;
-        border: 2px solid var(--filter-border) !important;
-        border-radius: 15px !important;
-        box-shadow: 0 4px 12px var(--filter-shadow) !important;
-        transition: all 0.3s ease !important;
+        background-color: var(--card-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px var(--shadow);
+        transition: all 0.3s ease;
     }
     
-    .stSelectbox div[data-baseweb="select"]:hover {
-        border-color: var(--primary-color) !important;
-        box-shadow: 0 6px 16px var(--filter-shadow) !important;
-        transform: translateY(-2px) !important;
-    }
-    
-    .stSelectbox div[data-baseweb="select"] div {
-        background-color: transparent !important;
-        font-weight: 600 !important;
-        color: var(--primary-color) !important;
-        padding: 0.7rem 1rem !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        text-align: center !important;
-    }
-    
-    .stSelectbox label {
-        background-color: var(--card-color) !important;
-        color: var(--primary-color) !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        padding: 0.3rem 0.8rem !important;
-        border-radius: 8px !important;
-        margin-bottom: 0.5rem !important;
-        display: inline-block !important;
-        box-shadow: 0 2px 5px var(--filter-shadow) !important;
+    .stSelectbox div[data-baseweb="select"]:hover,
+    .stSelectbox div[data-baseweb="select"]:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
     }
     
     /* Filter container styling */
     .filter-container {
         background-color: var(--card-color);
-        border-radius: 15px;
+        border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 2rem;
-        box-shadow: 0 8px 20px var(--shadow);
-        border-left: 5px solid var(--primary-color);
+        box-shadow: 0 4px 12px var(--shadow);
+        border: 1px solid var(--border-color);
     }
     
     .filter-title {
-        font-weight: 800;
+        font-weight: 600;
         color: var(--primary-color);
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        margin-bottom: 1.25rem;
         display: flex;
         align-items: center;
     }
     
     .filter-title svg {
         margin-right: 0.5rem;
-    }
-    
-    /* Fix for select boxes */
-    .stSelectbox div[data-baseweb="select"] div[data-testid="stMarkdownContainer"] p {
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-    }
-    
-    /* Fix for labels */
-    .stTextInput label, .stTextArea label, .stSelectbox label, .stNumberInput label {
-        font-weight: 600;
-        color: var(--text-primary);
-        font-size: 1rem;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: normal;
-    }
-    
-    .stTextInput input:focus, .stTextArea textarea:focus, .stSelectbox div[data-baseweb="select"] div:focus, .stNumberInput div[data-baseweb="input"] input:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        color: var(--primary-color);
     }
     
     /* Expander styling */
     .streamlit-expanderHeader {
-        font-weight: 700;
+        font-weight: 600;
         color: var(--primary-color);
         background-color: var(--card-color);
-        border-radius: 12px;
-        padding: 0.8rem 1.2rem;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: normal;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        border: 1px solid var(--border-color);
     }
     
-    /* Sidebar styling - ENHANCED */
-    [data-testid="stSidebar"] {
-        background-color: var(--card-color);
-        border-right: none;
-        box-shadow: 5px 0 20px var(--shadow);
-    }
-    
-    .sidebar-content {
-        padding: 2.5rem 1.5rem;
-    }
-    
-    .sidebar-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 2rem;
-        font-weight: 800;
-        color: var(--primary-color);
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-    
-    .sidebar-subtitle {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: var(--secondary-color);
-        margin: 1.8rem 0 1.2rem 0;
-    }
-    
-    /* Animation classes - ENHANCED */
+    /* Animation classes */
     .fade-in {
-        animation: fadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        animation: fadeIn 0.6s ease-out;
     }
     
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(30px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Stats card styling - ENHANCED */
+    /* Stats card styling */
     .stats-card {
-        background: var(--gradient-primary);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 15px 30px var(--shadow);
+        background-color: var(--card-color);
+        border-radius: 12px;
+        padding: 1.75rem;
+        box-shadow: 0 4px 12px var(--shadow);
         text-align: center;
-        transition: all 0.4s ease;
-        color: white;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--primary-color);
     }
     
     .stats-card:hover {
-        transform: translateY(-8px) scale(1.03);
-        box-shadow: 0 20px 40px var(--shadow);
+        transform: translateY(-6px);
+        box-shadow: 0 8px 16px var(--shadow-hover);
+    }
+    
+    .stats-card.accent {
+        border-left-color: var(--secondary-color);
     }
     
     .stats-number {
-        font-size: 3.5rem;
-        font-weight: 800;
-        color: white;
-        margin-bottom: 0.8rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        font-size: 2.75rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-card.accent .stats-number {
+        color: var(--secondary-color);
     }
     
     .stats-label {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 1px;
     }
     
-    /* Search box styling - ENHANCED */
+    /* Search styling */
     .search-container {
-        background-color: var(--filter-bg);
-        border-radius: 50px;
-        padding: 0.5rem;
-        box-shadow: 0 8px 20px var(--filter-shadow);
-        margin-bottom: 2.5rem;
-        border: 2px solid var(--filter-border);
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-    }
-    
-    .search-container:hover, .search-container:focus-within {
-        box-shadow: 0 12px 25px var(--filter-shadow);
-        transform: translateY(-3px);
-        border-color: var(--primary-color);
-    }
-    
-    .search-icon {
-        margin-left: 1rem;
-        color: var(--primary-color);
-        font-size: 1.5rem;
+        position: relative;
+        margin-bottom: 1.5rem;
     }
     
     .search-input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        padding: 1rem;
-        font-size: 1.1rem;
-        font-weight: 600;
+        width: 100%;
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        padding: 0.75rem 1rem 0.75rem 3rem;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
         color: var(--text-primary);
+        background-color: var(--card-color);
+        box-shadow: 0 2px 8px var(--shadow);
+        transition: all 0.3s ease;
     }
     
     .search-input:focus {
         outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
     }
     
-    /* Custom search input styling */
-    .stTextInput[data-testid="stTextInput"] > div:first-child {
-        background-color: var(--filter-bg) !important;
-        border-radius: 50px !important;
-        border: 2px solid var(--filter-border) !important;
-        box-shadow: 0 8px 20px var(--filter-shadow) !important;
-        transition: all 0.3s ease !important;
-        padding: 0.3rem !important;
+    .search-icon {
+        position: absolute;
+        left: 1.25rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-tertiary);
     }
     
-    .stTextInput[data-testid="stTextInput"] > div:first-child:hover {
-        border-color: var(--primary-color) !important;
-        box-shadow: 0 12px 25px var(--filter-shadow) !important;
-        transform: translateY(-3px) !important;
-    }
-    
-    .stTextInput[data-testid="stTextInput"] input {
-        border: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-        font-weight: 600 !important;
-        color: var(--primary-color) !important;
-    }
-    
-    /* Empty state styling - ENHANCED */
+    /* Empty state styling */
     .empty-state {
         text-align: center;
-        padding: 4rem 0;
+        padding: 3rem 2rem;
         background-color: var(--card-color);
-        border-radius: 20px;
-        box-shadow: 0 10px 25px var(--shadow);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px var(--shadow);
         margin: 2rem 0;
+        border: 1px solid var(--border-color);
     }
     
     .empty-state-icon {
-        font-size: 6rem;
+        font-size: 4rem;
         color: var(--primary-color);
-        margin-bottom: 2rem;
-        opacity: 0.8;
+        margin-bottom: 1.5rem;
+        opacity: 0.7;
     }
     
     .empty-state-text {
-        font-size: 1.5rem;
-        font-weight: 700;
+        font-size: 1.25rem;
+        font-weight: 600;
         color: var(--text-secondary);
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
     
-    /* Footer styling - ENHANCED */
+    /* Footer styling */
     .footer {
         text-align: center;
-        padding: 3rem 0;
+        padding: 2.5rem 0;
         color: var(--text-tertiary);
-        font-size: 1rem;
-        font-weight: 500;
-        background-color: var(--card-color);
-        border-radius: 20px 20px 0 0;
+        font-size: 0.875rem;
+        font-weight: 400;
         margin-top: 3rem;
-        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
     }
     
-    .footer a {
+    .footer-brand {
+        font-weight: 600;
+        font-size: 1rem;
         color: var(--primary-color);
-        text-decoration: none;
-        font-weight: 700;
-    }
-    
-    /* Book cover styling - ENHANCED */
-    .book-cover {
-        width: 100%;
-        height: 250px;
-        background: var(--gradient-primary);
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-family: 'Playfair Display', serif;
-        font-weight: 800;
-        font-size: 1.5rem;
-        text-align: center;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        position: relative;
-        overflow: hidden;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-    }
-    
-    .book-cover::after {
-        content: "📖";
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        font-size: 2rem;
-        opacity: 0.5;
+        margin-bottom: 0.5rem;
     }
     
     /* Tab styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
+        gap: 4px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background-color: var(--card-color);
-        border-radius: 10px 10px 0 0;
-        padding: 10px 20px;
-        font-weight: 700;
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        background-color: transparent;
+        border-radius: 6px;
+        padding: 0.6rem 1rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        border: none;
     }
     
     .stTabs [aria-selected="true"] {
         background-color: var(--primary-color);
         color: white;
+        font-weight: 600;
+    }
+            
+    .stTextInput input, 
+    .stTextArea textarea, 
+    .stNumberInput div[data-baseweb="input"] input,
+    .stSelectbox div[data-baseweb="select"] {
+        color: #000000 !important; /* Force black text color */
+    }
+
+    .stTextInput label, 
+    .stTextArea label, 
+    .stNumberInput label,
+    .stSelectbox label {
+        color: #000000 !important; /* Force black text color */
+    }
+
+    .stTextInput input::placeholder, 
+    .stTextArea textarea::placeholder, 
+    .stNumberInput div[data-baseweb="input"] input::placeholder {
+        color: #666666 !important; /* Gray placeholder text */
     }
     
     /* Chart styling */
     [data-testid="stVegaLiteChart"] {
         background-color: var(--card-color);
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: 0 10px 25px var(--shadow);
-    }
-    
-    /* Fix for filter and sort dropdowns */
-    .stSelectbox[data-testid="stSelectbox"] {
-        margin-bottom: 20px;
-    }
-    
-    /* Fix for text overflow in all elements */
-    [data-testid="stVerticalBlock"] > div {
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        white-space: normal !important;
-    }
-    
-    /* Fix for description text */
-    .streamlit-expanderContent p {
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        white-space: normal !important;
-        font-size: 1rem !important;
-        line-height: 1.6 !important;
-        color: var(--text-secondary) !important;
-    }
-    
-    /* Fix for success/error messages */
-    .stAlert {
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        white-space: normal !important;
-    }
-    
-    .stAlert p {
-        font-weight: 600 !important;
-        font-size: 1rem !important;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px var(--shadow);
+        border: 1px solid var(--border-color);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -820,27 +679,21 @@ def get_stats():
 init_db()
 
 # Generate a random gradient for book covers
-def get_random_gradient():
-    gradients = [
-        "linear-gradient(135deg, #6366F1, #8B5CF6)",
-        "linear-gradient(135deg, #EC4899, #F43F5E)",
-        "linear-gradient(135deg, #10B981, #34D399)",
-        "linear-gradient(135deg, #F59E0B, #FBBF24)",
-        "linear-gradient(135deg, #3B82F6, #60A5FA)",
-        "linear-gradient(135deg, #8B5CF6, #A78BFA)",
-        "linear-gradient(135deg, #EC4899, #F9A8D4)",
-        "linear-gradient(135deg, #EF4444, #F87171)"
+def get_random_cover_color():
+    colors = [
+        "#4F46E5", "#7C3AED", "#F43F5E", "#10B981",
+        "#3B82F6", "#F59E0B", "#EC4899", "#8B5CF6"
     ]
-    return random.choice(gradients)
+    return random.choice(colors)
 
 # Main content
-st.markdown("<h1 class='main-header'>📚 BOOKVERSE</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-header'>📚 BOOKVERSE<span>Personal Library Management</span></h1>", unsafe_allow_html=True)
 
 # Create tabs with better styling
 tabs = st.tabs(["📚 Browse", "➕ Add Book", "✏️ Edit Books", "🔍 Search", "📊 Statistics"])
 
 with tabs[0]:  # Browse Books
-    st.markdown("<h2 class='sub-header fade-in'>📖 Book Collection</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-header fade-in'>Book Collection</h2>", unsafe_allow_html=True)
     
     books = get_all_books()
     
@@ -848,10 +701,10 @@ with tabs[0]:  # Browse Books
     st.markdown("""
     <div class="filter-container fade-in">
         <div class="filter-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
             </svg>
-            Filter & Sort Books
+            Filter & Sort
         </div>
     """, unsafe_allow_html=True)
     
@@ -886,42 +739,48 @@ with tabs[0]:  # Browse Books
         cols = st.columns(3)
         for i, (_, book) in enumerate(filtered_books.iterrows()):
             with cols[i % 3]:
-                gradient = get_random_gradient()
+                cover_color = get_random_cover_color()
                 st.markdown(f"""
                 <div class='book-card fade-in'>
-                    <div class='book-cover' style='background: {gradient};'>
+                    <div class='book-cover' style='background-color: {cover_color};'>
                         {book['title']}
                     </div>
                     <div class='book-title'>{book['title']}</div>
                     <div class='book-author'>by {book['author']}</div>
-                    <div class='book-details'><i>📅</i> Published: {book['year']}</div>
-                    <div class='book-details'><i>📖</i> Genre: {book['genre']}</div>
+                    <div class='book-details'><i>📅</i> {book['year']}</div>
+                    <div class='book-details'><i>📚</i> {book['genre']}</div>
                     <div class='badge badge-{book["genre"].lower().replace(" ", "")}'>{book['genre']}</div>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                with st.expander("📝 Description"):
+                with st.expander("View Description"):
                     st.write(book['description'])
     else:
-        st.info("No books found matching your criteria.")
+        st.markdown("""
+        <div class='empty-state'>
+            <div class='empty-state-icon'>📚</div>
+            <div class='empty-state-text'>No books found</div>
+            <p>Try adjusting your filters or add some books to your library.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 with tabs[1]:  # Add Book
-    st.markdown("<h2 class='sub-header fade-in'>➕ Add New Book</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-header fade-in'>Add New Book</h2>", unsafe_allow_html=True)
     
     # Enhanced form with better styling
     with st.form("add_book_form"):
-        title = st.text_input("📕 Title", max_chars=100)
-        author = st.text_input("✍️ Author", max_chars=100)
-        genre = st.selectbox("🏷️ Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
+        title = st.text_input("Title", max_chars=100)
+        author = st.text_input("Author", max_chars=100)
+        genre = st.selectbox("Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
                                       "Mystery", "Thriller", "Romance", "Biography", 
                                       "History", "Self-Help", "Magical Realism", "Coming-of-age",
                                       "Psychological Fiction", "Other"])
-        year = st.number_input("📅 Publication Year", min_value=1000, max_value=datetime.now().year, 
+        year = st.number_input("Publication Year", min_value=1000, max_value=datetime.now().year, 
                               value=2020, step=1)
-        isbn = st.text_input("🔢 ISBN", max_chars=20)
-        description = st.text_area("📝 Description", height=150)
+        isbn = st.text_input("ISBN", max_chars=20)
+        description = st.text_area("Description", height=150)
         
-        submitted = st.form_submit_button("Add Book to Library")
+        submitted = st.form_submit_button("Add Book")
         
         if submitted:
             if title and author:
@@ -930,33 +789,33 @@ with tabs[1]:  # Add Book
                 st.balloons()
                 
                 # Show success card with enhanced styling
-                gradient = get_random_gradient()
+                cover_color = get_random_cover_color()
                 st.markdown(f"""
                 <div class='book-card fade-in'>
-                    <div class='book-cover' style='background: {gradient};'>
+                    <div class='book-cover' style='background-color: {cover_color};'>
                         {title}
                     </div>
                     <div class='book-title'>{title}</div>
                     <div class='book-author'>by {author}</div>
-                    <div class='book-details'><i>📅</i> Published: {year}</div>
-                    <div class='book-details'><i>📖</i> Genre: {genre}</div>
+                    <div class='book-details'><i>📅</i> {year}</div>
+                    <div class='book-details'><i>📚</i> {genre}</div>
                     <div class='badge badge-{genre.lower().replace(" ", "")}'>{genre}</div>
-                    <p style="font-weight: 700; color: var(--accent-color); margin-top: 15px; font-size: 1.1rem;">✅ Book added to your library!</p>
+                    <p style="font-weight: 600; color: #10B981; margin-top: 12px; font-size: 0.95rem;">✓ Successfully added to your library</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.error("Title and Author are required fields.")
 
 with tabs[2]:  # Edit Books
-    st.markdown("<h2 class='sub-header fade-in'>✏️ Edit or Delete Books</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-header fade-in'>Manage Your Books</h2>", unsafe_allow_html=True)
     
     books = get_all_books()
     if not books.empty:
-        # Create a searchable dropdown with redesigned styling
+        # Searchable dropdown
         st.markdown("""
         <div class="filter-container fade-in">
             <div class="filter-title">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                 </svg>
@@ -972,27 +831,27 @@ with tabs[2]:  # Edit Books
         selected_book = books[books['title'] == selected_book_title].iloc[0]
         book_id = selected_book['id']
         
-        # Display book details in an enhanced card
-        gradient = get_random_gradient()
+        # Display book details
+        cover_color = get_random_cover_color()
         st.markdown(f"""
         <div class='book-card fade-in'>
-            <div class='book-cover' style='background: {gradient};'>
+            <div class='book-cover' style='background-color: {cover_color};'>
                 {selected_book['title']}
             </div>
             <div class='book-title'>{selected_book['title']}</div>
             <div class='book-author'>by {selected_book['author']}</div>
-            <div class='book-details'><i>📅</i> Published: {selected_book['year']}</div>
-            <div class='book-details'><i>📖</i> Genre: {selected_book['genre']}</div>
+            <div class='book-details'><i>📅</i> {selected_book['year']}</div>
+            <div class='book-details'><i>📚</i> {selected_book['genre']}</div>
             <div class='badge badge-{selected_book["genre"].lower().replace(" ", "")}'>{selected_book['genre']}</div>
         </div>
         """, unsafe_allow_html=True)
         
-        # Enhanced form with better styling
+        # Edit form
         with st.form("edit_book_form"):
-            st.markdown("<p style='font-weight: 700; font-size: 1.2rem; margin-bottom: 15px; color: var(--primary-color);'>📝 Edit Book Details</p>", unsafe_allow_html=True)
-            edit_title = st.text_input("📕 Title", value=selected_book['title'], max_chars=100)
-            edit_author = st.text_input("✍️ Author", value=selected_book['author'], max_chars=100)
-            edit_genre = st.selectbox("🏷️ Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
+            st.markdown("<p style='font-weight: 600; color: var(--primary-color); margin-bottom: 1rem; font-size: 1.1rem;'>Edit Book Details</p>", unsafe_allow_html=True)
+            edit_title = st.text_input("Title", value=selected_book['title'], max_chars=100)
+            edit_author = st.text_input("Author", value=selected_book['author'], max_chars=100)
+            edit_genre = st.selectbox("Genre", ["Fiction", "Non-Fiction", "Science Fiction", "Fantasy", 
                                               "Mystery", "Thriller", "Romance", "Biography", 
                                               "History", "Self-Help", "Magical Realism", "Coming-of-age",
                                               "Psychological Fiction", "Other"], 
@@ -1004,16 +863,12 @@ with tabs[2]:  # Edit Books
                                                                         "Mystery", "Thriller", "Romance", "Biography", 
                                                                         "History", "Self-Help", "Magical Realism", "Coming-of-age",
                                                                         "Psychological Fiction", "Other"] else 0)
-            edit_year = st.number_input("📅 Publication Year", min_value=1000, max_value=datetime.now().year, 
+            edit_year = st.number_input("Publication Year", min_value=1000, max_value=datetime.now().year, 
                                        value=int(selected_book['year']), step=1)
-            edit_isbn = st.text_input("🔢 ISBN", value=selected_book['isbn'] if selected_book['isbn'] else "", max_chars=20)
-            edit_description = st.text_area("📝 Description", value=selected_book['description'] if selected_book['description'] else "", height=150)
+            edit_isbn = st.text_input("ISBN", value=selected_book['isbn'] if selected_book['isbn'] else "", max_chars=20)
+            edit_description = st.text_area("Description", value=selected_book['description'] if selected_book['description'] else "", height=150)
             
-            col1_btn, col2_btn = st.columns(2)
-            with col1_btn:
-                update_button = st.form_submit_button("💾 Update Book")
-            with col2_btn:
-                delete_button = st.form_submit_button("🗑️ Delete Book", type="primary", help="This action cannot be undone")
+            update_button = st.form_submit_button("Update Book")
             
             if update_button:
                 if edit_title and edit_author:
@@ -1022,33 +877,49 @@ with tabs[2]:  # Edit Books
                     st.success(f"Book '{edit_title}' has been updated successfully!")
                 else:
                     st.error("Title and Author are required fields.")
-            
-            if delete_button:
-                delete_book(book_id)
-                st.success(f"Book '{selected_book['title']}' has been deleted successfully!")
-                st.rerun()  # Using st.rerun() instead of st.experimental_rerun()
+        
+        # Separate delete section
+        st.markdown("<hr style='margin: 2rem 0;' />", unsafe_allow_html=True)
+        st.markdown("<h3 style='font-weight: 600; color: var(--secondary-color);'>Delete Book</h3>", unsafe_allow_html=True)
+        st.warning("This action cannot be undone.")
+        
+        if st.button("Delete Book", type="primary"):
+            st.session_state['show_confirm'] = True
+        
+        if 'show_confirm' in st.session_state and st.session_state['show_confirm']:
+            st.markdown("<p style='font-weight: 600; color: var(--secondary-color);'>Are you sure you want to delete this book?</p>", unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Yes, delete it"):
+                    delete_book(book_id)
+                    st.success(f"Book '{selected_book['title']}' has been deleted successfully!")
+                    del st.session_state['show_confirm']
+                    st.rerun()
+            with col2:
+                if st.button("Cancel"):
+                    del st.session_state['show_confirm']
+                    st.rerun()
     else:
-        # Enhanced empty state
         st.markdown("""
         <div class='empty-state'>
             <div class='empty-state-icon'>📚</div>
-            <div class='empty-state-text'>No books in your library yet.</div>
-            <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-secondary);">Add some books to get started!</p>
+            <div class='empty-state-text'>Your library is empty</div>
+            <p style="font-weight: 500; font-size: 0.95rem; color: var(--text-secondary);">Add some books to get started!</p>
         </div>
         """, unsafe_allow_html=True)
-
+        
 with tabs[3]:  # Search
-    st.markdown("<h2 class='sub-header fade-in'>🔍 Search Books</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-header fade-in'>Search Your Library</h2>", unsafe_allow_html=True)
     
-    # Enhanced search box with completely redesigned styling
+    # Enhanced search box
     st.markdown("""
     <div class="filter-container fade-in">
         <div class="filter-title">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            Find Books in Your Library
+            Find Books
         </div>
     """, unsafe_allow_html=True)
     
@@ -1067,37 +938,37 @@ with tabs[3]:  # Search
             cols = st.columns(3)
             for i, (_, book) in enumerate(results.iterrows()):
                 with cols[i % 3]:
-                    gradient = get_random_gradient()
+                    cover_color = get_random_cover_color()
                     st.markdown(f"""
                     <div class='book-card fade-in'>
-                        <div class='book-cover' style='background: {gradient};'>
+                        <div class='book-cover' style='background-color: {cover_color};'>
                             {book['title']}
                         </div>
                         <div class='book-title'>{book['title']}</div>
                         <div class='book-author'>by {book['author']}</div>
-                        <div class='book-details'><i>📅</i> Published: {book['year']}</div>
-                        <div class='book-details'><i>📖</i> Genre: {book['genre']}</div>
+                        <div class='book-details'><i>📅</i> {book['year']}</div>
+                        <div class='book-details'><i>📚</i> {book['genre']}</div>
                         <div class='badge badge-{book["genre"].lower().replace(" ", "")}'>{book['genre']}</div>
                     </div>
                     """, unsafe_allow_html=True)
                     
-                    with st.expander("📝 Description"):
+                    with st.expander("View Description"):
                         st.write(book['description'])
         else:
             # Enhanced empty search results
             st.markdown("""
             <div class='empty-state'>
                 <div class='empty-state-icon'>🔍</div>
-                <div class='empty-state-text'>No books found matching your search.</div>
-                <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-secondary);">Try a different search term or browse all books.</p>
+                <div class='empty-state-text'>No matching books found</div>
+                <p style="font-weight: 500; font-size: 0.95rem; color: var(--text-secondary);">Try a different search term or browse all books.</p>
             </div>
             """, unsafe_allow_html=True)
     else:
         # Enhanced search tips
         st.markdown("""
-        <div style="background-color: var(--card-color); border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px var(--shadow); margin-top: 20px;">
-            <h3 style="font-weight: 800; color: var(--primary-color); margin-bottom: 20px; font-size: 1.5rem;">🔍 Search Tips</h3>
-            <ul style="font-weight: 600; font-size: 1.1rem; color: var(--text-secondary); margin-left: 20px; line-height: 2;">
+        <div style="background-color: var(--card-color); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px var(--shadow); margin-top: 1.5rem; border: 1px solid var(--border-color);">
+            <h3 style="font-weight: 600; color: var(--primary-color); margin-bottom: 1rem; font-size: 1.1rem;">Search Tips</h3>
+            <ul style="font-weight: 500; font-size: 0.95rem; color: var(--text-secondary); margin-left: 1.5rem; line-height: 1.8;">
                 <li>Search by title: "Lord of the Rings"</li>
                 <li>Search by author: "Tolkien"</li>
                 <li>Search by genre: "Fantasy"</li>
@@ -1107,7 +978,7 @@ with tabs[3]:  # Search
         """, unsafe_allow_html=True)
 
 with tabs[4]:  # Statistics
-    st.markdown("<h2 class='sub-header fade-in'>📊 Library Statistics</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-header fade-in'>Library Statistics</h2>", unsafe_allow_html=True)
     
     # Get statistics
     stats = get_stats()
@@ -1124,21 +995,21 @@ with tabs[4]:  # Statistics
     
     with col2:
         st.markdown(f"""
-        <div class='stats-card' style="background: linear-gradient(135deg, #EC4899, #F43F5E);">
+        <div class='stats-card accent'>
             <div class='stats-number'>{stats['total_authors']}</div>
             <div class='stats-label'>Unique Authors</div>
         </div>
         """, unsafe_allow_html=True)
     
     # Display genre distribution with better styling
-    st.markdown("<h3 style='font-weight: 800; color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8rem;'>📊 Genre Distribution</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='font-weight: 600; color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.25rem;'>Genre Distribution</h3>", unsafe_allow_html=True)
     if stats['genre_data']:
         # Create a simple bar chart with better styling
         genre_df = pd.DataFrame(stats['genre_data'], columns=['Genre', 'Count'])
         st.bar_chart(genre_df.set_index('Genre'))
     
     # Display year distribution with better styling
-    st.markdown("<h3 style='font-weight: 800; color: var(--primary-color); margin: 30px 0 20px 0; font-size: 1.8rem;'>📈 Publication Years</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='font-weight: 600; color: var(--primary-color); margin: 2rem 0 1rem 0; font-size: 1.25rem;'>Publication Years</h3>", unsafe_allow_html=True)
     if stats['year_data']:
         # Create a simple line chart with better styling
         year_df = pd.DataFrame(stats['year_data'], columns=['Year', 'Count'])
@@ -1146,10 +1017,9 @@ with tabs[4]:  # Statistics
         st.line_chart(year_df.set_index('Year'))
 
 # Enhanced footer
-st.markdown("---")
 st.markdown("""
 <div class='footer'>
-    <p style="font-weight: 700; font-size: 1.3rem; color: var(--primary-color); margin-bottom: 10px;">📚 BookVerse | Modern Library Management System</p>
-    <p style="font-weight: 600; font-size: 1rem;">Created with ❤️ using Streamlit and SQLite</p>
+    <div class='footer-brand'>BookVerse Library System</div>
+    <p>Elegantly organize your personal book collection</p>
 </div>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True)  
