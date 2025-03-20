@@ -963,7 +963,7 @@ with tabs[2]:  # Edit Books
         """, unsafe_allow_html=True)
         
         book_options = books['title'].tolist()
-        selected_book_title = st.selectbox("", book_options)
+        selected_book_title = st.selectbox("Select a Book to Edit", book_options)
         
         st.markdown("</div>", unsafe_allow_html=True)
         
