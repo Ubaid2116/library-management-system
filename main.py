@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS with fixed styling issues
+# Custom CSS with enhanced UI, bolder text, and more attractive styling
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
@@ -29,6 +29,9 @@ st.markdown("""
         --shadow: rgba(99, 102, 241, 0.15);
         --gradient-primary: linear-gradient(135deg, #6366F1, #8B5CF6);
         --gradient-secondary: linear-gradient(135deg, #EC4899, #F43F5E);
+        --filter-bg: #EEF2FF;
+        --filter-border: #C7D2FE;
+        --filter-shadow: rgba(99, 102, 241, 0.1);
     }
     
     .dark {
@@ -41,6 +44,9 @@ st.markdown("""
         --text-secondary: #CBD5E1;
         --text-tertiary: #94A3B8;
         --shadow: rgba(0, 0, 0, 0.3);
+        --filter-bg: #1E293B;
+        --filter-border: #4B5563;
+        --filter-shadow: rgba(0, 0, 0, 0.2);
     }
     
     html, body, [data-testid="stAppViewContainer"] {
@@ -259,7 +265,7 @@ st.markdown("""
     }
     
     /* Form styling - ENHANCED */
-    .stTextInput input, .stTextArea textarea, .stSelectbox div[data-baseweb="select"] div, .stNumberInput div[data-baseweb="input"] input {
+    .stTextInput input, .stTextArea textarea, .stNumberInput div[data-baseweb="input"] input {
         background-color: var(--card-color);
         border: 2px solid #E2E8F0;
         border-radius: 12px;
@@ -274,11 +280,64 @@ st.markdown("""
         overflow-wrap: break-word;
     }
     
-    /* Fix for select boxes */
+    /* NEW FILTER STYLING */
     .stSelectbox div[data-baseweb="select"] {
-        width: 100%;
+        background-color: var(--filter-bg) !important;
+        border: 2px solid var(--filter-border) !important;
+        border-radius: 15px !important;
+        box-shadow: 0 4px 12px var(--filter-shadow) !important;
+        transition: all 0.3s ease !important;
     }
     
+    .stSelectbox div[data-baseweb="select"]:hover {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 6px 16px var(--filter-shadow) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    .stSelectbox div[data-baseweb="select"] div {
+        background-color: transparent !important;
+        font-weight: 600 !important;
+        color: var(--primary-color) !important;
+        padding: 0.7rem 1rem !important;
+    }
+    
+    .stSelectbox label {
+        background-color: var(--card-color) !important;
+        color: var(--primary-color) !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        padding: 0.3rem 0.8rem !important;
+        border-radius: 8px !important;
+        margin-bottom: 0.5rem !important;
+        display: inline-block !important;
+        box-shadow: 0 2px 5px var(--filter-shadow) !important;
+    }
+    
+    /* Filter container styling */
+    .filter-container {
+        background-color: var(--card-color);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 20px var(--shadow);
+        border-left: 5px solid var(--primary-color);
+    }
+    
+    .filter-title {
+        font-weight: 800;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .filter-title svg {
+        margin-right: 0.5rem;
+    }
+    
+    /* Fix for select boxes */
     .stSelectbox div[data-baseweb="select"] div[data-testid="stMarkdownContainer"] p {
         white-space: normal !important;
         word-wrap: break-word !important;
@@ -383,34 +442,65 @@ st.markdown("""
     
     /* Search box styling - ENHANCED */
     .search-container {
-        position: relative;
+        background-color: var(--filter-bg);
+        border-radius: 50px;
+        padding: 0.5rem;
+        box-shadow: 0 8px 20px var(--filter-shadow);
         margin-bottom: 2.5rem;
+        border: 2px solid var(--filter-border);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+    }
+    
+    .search-container:hover, .search-container:focus-within {
+        box-shadow: 0 12px 25px var(--filter-shadow);
+        transform: translateY(-3px);
+        border-color: var(--primary-color);
     }
     
     .search-icon {
-        position: absolute;
-        left: 1.2rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--text-tertiary);
-        font-size: 1.2rem;
+        margin-left: 1rem;
+        color: var(--primary-color);
+        font-size: 1.5rem;
     }
     
     .search-input {
-        width: 100%;
-        padding: 1rem 1.2rem 1rem 3.5rem;
-        border-radius: 50px;
-        border: 3px solid #E2E8F0;
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 1rem;
         font-size: 1.1rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        font-weight: 600;
+        color: var(--text-primary);
     }
     
     .search-input:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
         outline: none;
+    }
+    
+    /* Custom search input styling */
+    .stTextInput[data-testid="stTextInput"] > div:first-child {
+        background-color: var(--filter-bg) !important;
+        border-radius: 50px !important;
+        border: 2px solid var(--filter-border) !important;
+        box-shadow: 0 8px 20px var(--filter-shadow) !important;
+        transition: all 0.3s ease !important;
+        padding: 0.3rem !important;
+    }
+    
+    .stTextInput[data-testid="stTextInput"] > div:first-child:hover {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 12px 25px var(--filter-shadow) !important;
+        transform: translateY(-3px) !important;
+    }
+    
+    .stTextInput[data-testid="stTextInput"] input {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        font-weight: 600 !important;
+        color: var(--primary-color) !important;
     }
     
     /* Empty state styling - ENHANCED */
@@ -752,27 +842,15 @@ with tabs[0]:  # Browse Books
     
     books = get_all_books()
     
-    # Filter options with better styling
+    # Filter options with completely redesigned styling
     st.markdown("""
-    <style>
-        .filter-container {
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: var(--card-color);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px var(--shadow);
-        }
-        .filter-container label {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-        .filter-container .stSelectbox, .filter-container .stNumberInput {
-            margin-bottom: 20px;
-        }
-    </style>
-    <div class='filter-container'>
+    <div class="filter-container fade-in">
+        <div class="filter-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            Filter & Sort Books
+        </div>
     """, unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
@@ -824,7 +902,7 @@ with tabs[0]:  # Browse Books
                     st.write(book['description'])
     else:
         st.info("No books found matching your criteria.")
-        
+
 with tabs[1]:  # Add Book
     st.markdown("<h2 class='sub-header fade-in'>➕ Add New Book</h2>", unsafe_allow_html=True)
     
@@ -872,10 +950,22 @@ with tabs[2]:  # Edit Books
     
     books = get_all_books()
     if not books.empty:
-        # Create a searchable dropdown with better styling
-        st.markdown("<p style='font-weight: 700; font-size: 1.2rem; margin-bottom: 10px;'>📚 Select a book to edit or delete:</p>", unsafe_allow_html=True)
+        # Create a searchable dropdown with redesigned styling
+        st.markdown("""
+        <div class="filter-container fade-in">
+            <div class="filter-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                Select a Book to Edit
+            </div>
+        """, unsafe_allow_html=True)
+        
         book_options = books['title'].tolist()
         selected_book_title = st.selectbox("", book_options)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
         
         selected_book = books[books['title'] == selected_book_title].iloc[0]
         book_id = selected_book['id']
@@ -948,10 +1038,22 @@ with tabs[2]:  # Edit Books
 with tabs[3]:  # Search
     st.markdown("<h2 class='sub-header fade-in'>🔍 Search Books</h2>", unsafe_allow_html=True)
     
-    # Enhanced search box
-    st.markdown("<p style='font-weight: 700; font-size: 1.2rem; margin-bottom: 10px;'>🔎 Find books in your library:</p>", unsafe_allow_html=True)
+    # Enhanced search box with completely redesigned styling
+    st.markdown("""
+    <div class="filter-container fade-in">
+        <div class="filter-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            Find Books in Your Library
+        </div>
+    """, unsafe_allow_html=True)
+    
     search_query = st.text_input("", placeholder="Search by title, author, genre, or ISBN...", 
                                 help="Enter your search term and press Enter")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
     
     if search_query:
         results = search_books(search_query)
@@ -990,8 +1092,6 @@ with tabs[3]:  # Search
             """, unsafe_allow_html=True)
     else:
         # Enhanced search tips
-        st.info("Enter a search term to find books in your library")
-        
         st.markdown("""
         <div style="background-color: var(--card-color); border-radius: 20px; padding: 25px; box-shadow: 0 10px 25px var(--shadow); margin-top: 20px;">
             <h3 style="font-weight: 800; color: var(--primary-color); margin-bottom: 20px; font-size: 1.5rem;">🔍 Search Tips</h3>
