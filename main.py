@@ -11,13 +11,17 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better styling
+# Custom CSS for better styling, including a styled sidebar
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
     .main-header {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-size: 42px;
-        font-weight: bold;
+        font-size: 48px;
+        font-weight: 700;
         color: #1E3A8A;
         text-align: center;
         margin-bottom: 30px;
@@ -25,8 +29,7 @@ st.markdown("""
         border-bottom: 2px solid #1E3A8A;
     }
     .sub-header {
-        font-family: 'Helvetica Neue', sans-serif;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 600;
         color: #2563EB;
         margin-top: 20px;
@@ -40,22 +43,27 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
     .book-title {
-        font-family: 'Georgia', serif;
-        font-size: 20px;
-        font-weight: bold;
+        font-size: 22px;
+        font-weight: 700;
         color: #1F2937;
+        margin-bottom: 5px;
     }
     .book-author {
-        font-family: 'Georgia', serif;
-        font-style: italic;
+        font-size: 18px;
+        font-weight: 500;
         color: #4B5563;
+        margin-bottom: 10px;
     }
     .book-details {
-        font-family: 'Helvetica Neue', sans-serif;
+        font-size: 16px;
         color: #6B7280;
+        margin-bottom: 5px;
     }
     .sidebar-content {
-        padding: 20px;
+        background-color: #e2e8f0;
+        padding: 30px;
+        border-radius: 10px;
+        font-size: 18px;
     }
     .stButton button {
         background-color: #2563EB;
@@ -209,7 +217,7 @@ def search_books(query):
 # Initialize the database
 init_db()
 
-# Sidebar for navigation
+# Sidebar for navigation with custom background and styling
 st.sidebar.markdown("<div class='sidebar-content'>", unsafe_allow_html=True)
 st.sidebar.markdown("## 📚 Navigation")
 page = st.sidebar.radio("", ["View Books", "Add Book", "Edit/Delete Books", "Search Books"])
@@ -223,20 +231,17 @@ if page == "View Books":
     
     books = get_all_books()
     
-    # Display books in a grid
+    # Display books in a grid without images
     cols = st.columns(3)
     for i, (_, book) in enumerate(books.iterrows()):
         with cols[i % 3]:
-            st.markdown(f"<div class='card'>", unsafe_allow_html=True)
-            st.image(book['cover_url'], width=200)
+            st.markdown("<div class='card'>", unsafe_allow_html=True)
             st.markdown(f"<p class='book-title'>{book['title']}</p>", unsafe_allow_html=True)
             st.markdown(f"<p class='book-author'>by {book['author']}</p>", unsafe_allow_html=True)
             st.markdown(f"<p class='book-details'>Genre: {book['genre']}</p>", unsafe_allow_html=True)
             st.markdown(f"<p class='book-details'>Year: {book['year']}</p>", unsafe_allow_html=True)
-            
             with st.expander("Description"):
                 st.write(book['description'])
-            
             st.markdown("</div>", unsafe_allow_html=True)
 
 elif page == "Add Book":
@@ -253,7 +258,7 @@ elif page == "Add Book":
         isbn = st.text_input("ISBN", max_chars=20)
         description = st.text_area("Description", height=150)
         
-        # For demo purposes, we'll use a placeholder image
+        # For demo purposes, we'll use a placeholder text for cover_url
         cover_url = f"/placeholder.svg?height=300&width=200&text={title.replace(' ', '+')}"
         
         submitted = st.form_submit_button("Add Book")
@@ -280,7 +285,7 @@ elif page == "Edit/Delete Books":
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            st.image(selected_book['cover_url'], width=200)
+            st.markdown(f"<p class='book-title'>{selected_book['title']}</p>", unsafe_allow_html=True)
         
         with col2:
             with st.form("edit_book_form"):
@@ -300,17 +305,16 @@ elif page == "Edit/Delete Books":
                 edit_isbn = st.text_input("ISBN", value=selected_book['isbn'] if selected_book['isbn'] else "", max_chars=20)
                 edit_description = st.text_area("Description", value=selected_book['description'] if selected_book['description'] else "", height=150)
                 
-                # Keep the same cover or generate a new one if title changes
+                # Update cover_url only if title changes
                 if edit_title != selected_book['title']:
                     edit_cover_url = f"/placeholder.svg?height=300&width=200&text={edit_title.replace(' ', '+')}"
                 else:
                     edit_cover_url = selected_book['cover_url']
                 
-                col1, col2 = st.columns(2)
-                with col1:
+                col1_btn, col2_btn = st.columns(2)
+                with col1_btn:
                     update_button = st.form_submit_button("Update Book")
-                
-                with col2:
+                with col2_btn:
                     delete_button = st.form_submit_button("Delete Book", type="primary", help="This action cannot be undone")
                 
                 if update_button:
@@ -339,20 +343,17 @@ elif page == "Search Books":
         if not results.empty:
             st.success(f"Found {len(results)} results for '{search_query}'")
             
-            # Display search results
+            # Display search results without images
             cols = st.columns(3)
             for i, (_, book) in enumerate(results.iterrows()):
                 with cols[i % 3]:
-                    st.markdown(f"<div class='card'>", unsafe_allow_html=True)
-                    st.image(book['cover_url'], width=200)
+                    st.markdown("<div class='card'>", unsafe_allow_html=True)
                     st.markdown(f"<p class='book-title'>{book['title']}</p>", unsafe_allow_html=True)
                     st.markdown(f"<p class='book-author'>by {book['author']}</p>", unsafe_allow_html=True)
                     st.markdown(f"<p class='book-details'>Genre: {book['genre']}</p>", unsafe_allow_html=True)
                     st.markdown(f"<p class='book-details'>Year: {book['year']}</p>", unsafe_allow_html=True)
-                    
                     with st.expander("Description"):
                         st.write(book['description'])
-                    
                     st.markdown("</div>", unsafe_allow_html=True)
         else:
             st.warning(f"No books found matching '{search_query}'")
